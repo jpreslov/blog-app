@@ -2,9 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.root {
-  display: flex;
-  background-color: #0f0f0f;
-  width: screen;
-  height: screen
+html,
+body {
+  max-width: 100vw;
+  overflow: hidden
 }

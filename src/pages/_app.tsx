@@ -8,6 +8,7 @@ import { dark } from '@clerk/themes';
 // import SignUpPage from './sign-up/[[...index]]'
 
 export default function App({ Component, pageProps }: AppProps) {
+
   return (
       <ClerkProvider {...pageProps} appearance={{ baseTheme: dark }}>
         <Nav />
@@ -21,3 +22,5 @@ export default function App({ Component, pageProps }: AppProps) {
       </ClerkProvider>
   )
 }
+
+export { reportWebVitals } from 'next-axiom';
