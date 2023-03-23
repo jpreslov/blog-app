@@ -1,10 +1,12 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
+import { useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const [textInput, setTextInput] = useState('')
   return (
     <>
       <Head>
@@ -14,8 +16,13 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div>
-          <h1>hey</h1>
+        <div className='flex p-3 mt-5 font-normal justify-center text-lg h-96 xl:w-[60%] m-auto text-cyan-50 bg-slate-500 rounded-xl'>
+          <form className='flex flex-col w-96'>
+            <textarea className='rounded-md' onChange={e => setTextInput(e.target.value)} />
+            <button className='' type='submit'>
+              Submit
+            </button>
+          </form>
         </div>
       </main>
     </>

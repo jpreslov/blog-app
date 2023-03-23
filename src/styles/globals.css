@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.root {
+  display: flex;
+  background-color: #0f0f0f;
+  width: screen;
+  height: screen
+}
