@@ -1,16 +1,58 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import { useState } from 'react'
-import { useUser } from '@clerk/nextjs'
 
-const inter = Inter({ subsets: ['latin'] })
+// import prisma from '../../prisma/client'
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
+
+import { useUser, useAuth } from '@clerk/nextjs'
+import { NextApiRequest, NextApiResponse } from 'next'
+import PostCard from '@/components/PostCard'
+
+interface Post {
+  id: string,
+  content: string,
+  createdAt: Date,
+  userId: string
+}
 
 export default function Home() {
   const [textInput, setTextInput] = useState('')
+  const [posts, setPosts] = useState<Post[]>([])
 
-  const { isLoaded, isSignedIn, user } = useUser()
-  console.log(user)
+  const { user } = useUser()
+
+  const renderPosts: JSX.Element[] = posts.map(post => {
+    return <PostCard key={post.id} post={post} />
+  })
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await fetch('/api/getPosts')
+      const data = await res.json()
+      setPosts(data)
+    }
+    fetchPosts()
+  }, [])
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+
+    if (user && user.id !== null) {
+      if (textInput && textInput !== '') {
+      const res = await fetch('/api/createPost', {
+        method: 'POST',
+        body: JSON.stringify({
+          createdAt: new Date(Date.now()),
+          content: textInput,
+          userId: user.id
+        })
+      })
+      
+      const data: NextApiResponse = await res.json()
+      data ? data : false
+    }
+    }
+  }
 
   return (
     <>
@@ -21,14 +63,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div className='flex p-3 mt-5 font-normal justify-center text-lg h-96 xl:w-[60%] m-auto text-cyan-50 bg-slate-500 rounded-xl'>
-          <form className='flex flex-col w-96'>
-            <textarea className='p-2 bg-gray-900 rounded-md' onChange={e => setTextInput(e.target.value)} />
-            <button className='' type='submit'>
+
+        {/* Create post */}
+        <div className='flex p-3 mt-5 font-normal justify-center text-lg h-96 xl:w-[60%] m-auto text-cyan-50 rounded-xl'>
+          <form className='flex flex-col w-96' onSubmit={(e: FormEvent) => handleSubmit(e)}>
+            <textarea className='p-2 bg-gray-900 border-2 border-opacity-25 rounded-md border-sky-100' onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTextInput(e.target.value)} />
+            <button className='p-2 m-2 text-black rounded-md shadow-inner bg-slate-100' type='submit'>
               Submit
             </button>
           </form>
         </div>
+
+        {/* Display all posts */}
+        <div className='flex flex-col m-2'>
+          { renderPosts }
+        </div>
+        
       </main>
     </>
   )

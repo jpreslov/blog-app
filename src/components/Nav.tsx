@@ -1,8 +1,9 @@
 import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs"
+import { NextComponentType } from "next"
 
-const Nav = () => {
+const Nav: NextComponentType = () => {
   return (
-    <div className='flex flex-row justify-end w-screen h-14 bg-gradient-to-r from-slate-700 to-slate-900'>
+    <div className='flex flex-row justify-end w-screen h-14 bg-slate-700'>
       <SignedIn>
         <div className='flex flex-col p-3'>
           <UserButton />
