@@ -1,8 +1,6 @@
 const { withAxiom } = require('next-axiom')
 
-const nextConfig = {
-  reactStrictMode: true,
-}
+const nextConfig = {}
 
 module.exports = withAxiom({
   ...nextConfig

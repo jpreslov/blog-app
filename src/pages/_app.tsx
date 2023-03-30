@@ -5,7 +5,7 @@ import Nav from '../components/Nav'
 import { ClerkProvider, SignedIn, SignedOut, SignUp } from '@clerk/nextjs'
 import { dark } from '@clerk/themes';
 
-// import SignUpPage from './sign-up/[[...index]]'
+export { reportWebVitals } from 'next-axiom';
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -22,5 +22,3 @@ export default function App({ Component, pageProps }: AppProps) {
       </ClerkProvider>
   )
 }
-
-export { reportWebVitals } from 'next-axiom';

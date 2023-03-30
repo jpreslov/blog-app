@@ -7,6 +7,7 @@ import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { useUser, useAuth } from '@clerk/nextjs'
 import { NextApiRequest, NextApiResponse } from 'next'
 import PostCard from '@/components/PostCard'
+import { log } from 'next-axiom'
 
 interface IPost {
   id: string,
@@ -82,7 +83,7 @@ export default function Home() {
 
         {/* Display all posts */}
         <div className='flex flex-col m-2'>
-          { renderPosts }
+          {posts ? renderPosts : '' }
         </div>
         
       </main>
