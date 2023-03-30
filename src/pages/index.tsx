@@ -8,7 +8,7 @@ import { useUser, useAuth } from '@clerk/nextjs'
 import { NextApiRequest, NextApiResponse } from 'next'
 import PostCard from '@/components/PostCard'
 
-interface Post {
+interface IPost {
   id: string,
   content: string,
   createdAt: Date,
@@ -17,19 +17,25 @@ interface Post {
 
 export default function Home() {
   const [textInput, setTextInput] = useState('')
-  const [posts, setPosts] = useState<Post[]>([])
+  const [posts, setPosts] = useState<IPost[]>([])
 
   const { user } = useUser()
 
   const renderPosts: JSX.Element[] = posts.map(post => {
-    return <PostCard key={post.id} post={post} />
+    return <PostCard
+      key={post.id}
+      id={post.id}
+      createdAt={post.createdAt}
+      content={post.content}
+      userId={post.userId}
+    />
   })
 
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await fetch('/api/getPosts')
       const data = await res.json()
-      setPosts(data)
+      if (data && data !== '') setPosts(data)
     }
     fetchPosts()
   }, [])
