@@ -1,13 +1,12 @@
 import Head from 'next/head'
 import Image from 'next/image'
 
-// import prisma from '../../prisma/client'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 
-import { useUser, useAuth } from '@clerk/nextjs'
+import { useUser } from '@clerk/nextjs'
 import { NextApiRequest, NextApiResponse } from 'next'
 import PostCard from '@/components/PostCard'
-import { log } from 'next-axiom'
+// import { log } from 'next-axiom'
 
 interface IPost {
   id: string,
