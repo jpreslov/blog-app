@@ -2,7 +2,7 @@ import prisma from '../../../prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 interface Post {
-  id: string
+  id: number
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
