@@ -3,13 +3,13 @@ import { NextComponentType } from "next"
 
 const Nav: NextComponentType = () => {
   return (
-    <div className='flex flex-row justify-end w-screen h-14 bg-slate-700'>
-      <SignedIn>
+    <SignedIn>
+      <div className='flex flex-row justify-end w-screen h-14 bg-slate-700'>
         <div className='flex flex-col p-3'>
           <UserButton />
         </div>
-      </SignedIn>
-    </div>
+      </div>
+    </SignedIn>
   )
 }
 

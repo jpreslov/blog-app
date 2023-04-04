@@ -1,11 +1,11 @@
 import Head from 'next/head'
-import Image from 'next/image'
 
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
+import { useState, useEffect, ChangeEvent, FormEvent, useCallback, SetStateAction } from 'react'
 
 import { useUser } from '@clerk/nextjs'
 import { NextApiRequest, NextApiResponse } from 'next'
 import PostCard from '@/components/PostCard'
+import CreatePostWidget from '@/components/CreatePostWidget'
 // import { log } from 'next-axiom'
 
 interface IPost {
@@ -18,7 +18,7 @@ interface IPost {
 export default function Home() {
   const [textInput, setTextInput] = useState('')
   const [posts, setPosts] = useState<IPost[]>([])
-
+  const [usernameErr, setUsernameErr] = useState(true)
   const { user } = useUser()
 
   const renderPosts: JSX.Element[] = posts.map(post => {
@@ -31,34 +31,28 @@ export default function Home() {
     />
   })
 
+  const usernameCheck: () => boolean = () => {
+    if (user && !user.username) {
+      return true
+    } else if (user && user.username !== '') {
+      return false
+    }
+    return true
+  }
+
+  const checkUser: SetStateAction<boolean> = usernameCheck()
+
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await fetch('/api/getPosts')
       const data = await res.json()
       if (data && data !== '') setPosts(data)
     }
+
     fetchPosts()
-  }, [])
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-
-    if (user && user.id !== null) {
-      if (textInput && textInput !== '') {
-      const res = await fetch('/api/createPost', {
-        method: 'POST',
-        body: JSON.stringify({
-          createdAt: new Date(Date.now()),
-          content: textInput,
-          userId: user.id
-        })
-      })
-      
-      const data: NextApiResponse = await res.json()
-      data ? data : false
-    }
-    }
-  }
+    setUsernameErr(checkUser), { once: true }
+    
+  }, [user, checkUser])
 
   return (
     <>
@@ -71,20 +65,18 @@ export default function Home() {
       <main>
 
         {/* Create post */}
-        <div className='flex p-3 mt-5 font-normal justify-center text-lg h-96 xl:w-[60%] m-auto text-cyan-50 rounded-xl'>
-          <form className='flex flex-col w-96' onSubmit={(e: FormEvent) => handleSubmit(e)}>
-            <textarea className='p-2 bg-gray-900 border-2 border-opacity-25 rounded-md border-sky-100' onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTextInput(e.target.value)} />
-            <button className='p-2 m-2 text-black rounded-md shadow-inner bg-slate-100' type='submit'>
-              Submit
-            </button>
-          </form>
-        </div>
+        <CreatePostWidget
+          user={user}
+          textInput={textInput}
+          setTextInput={setTextInput}
+          usernameErr={usernameErr}
+        />
 
         {/* Display all posts */}
-        <div className='flex flex-col m-2'>
-          {posts ? renderPosts : '' }
+        <div className='flex flex-col items-center justify-center w-screen m-2'>
+          {posts ? renderPosts : ''}
         </div>
-        
+
       </main>
     </>
   )

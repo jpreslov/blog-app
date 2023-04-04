@@ -1,7 +1,15 @@
 // import { clerkClient, User } from '@clerk/nextjs/dist/api'
-import dayjs from 'dayjs'
+import Image from 'next/image'
 
+import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+
+import { useUser } from '@clerk/nextjs'
+
+import delIcon from '../../public/icons8-trash.svg'
+import { NextApiResponse } from 'next'
+import { useState } from 'react'
+
 dayjs.extend(relativeTime)
 
 interface IPost {
@@ -11,20 +19,32 @@ interface IPost {
   userId: string
 }
 
-const PostCard = ({ id, createdAt, content, userId }: IPost) => {
-  const formattedTime = dayjs().to(createdAt.toString())
+interface IUser {
+  id: string,
+  createdAt: Date,
+  profileImageUrl: string,
+  username: string
+}
 
-  const getUser: () => Promise<Response> = async () => {
-    const user = await fetch('/api/getUser', {
+const PostCard = ({ id, createdAt, content, userId }: IPost) => {
+  const [username, setUsername] = useState<string>()
+  const formattedTime = dayjs().to(createdAt.toString())
+  const currentUser = useUser()
+
+  const getUser: () => Promise<IUser> = async () => {
+    const data = await fetch('/api/getUser', {
       method: 'POST',
       body: JSON.stringify({
         userId: userId
       })
     })
-    return user
+    const res: IUser = await data.json()
+    // console.log(res)
+    setUsername(res)
+    return res
   }
 
-  const user: string = getUser().toString()
+  const user: Promise<IUser> = getUser()
 
   const deletePost = async () => {
     const data = await fetch('/api/deletePost', {
@@ -36,18 +56,27 @@ const PostCard = ({ id, createdAt, content, userId }: IPost) => {
   }
 
   return (
-    <div className='p-4 m-2 rounded-md text-zinc-200 bg-slate-700'>
+    <div className='w-3/4 p-4 m-2 rounded-md shadow-lg text-zinc-200 bg-slate-700 bg-opacity-80'>
       <div className='flex flex-row w-[100%] justify-between'>
-        <h1>{user}</h1>
-        <h1
-          className='p-2 text-black bg-white rounded-full'
-          onClick={() => deletePost()}
-        >
-            X
-          </h1>
+        <Image alt='user profile pic' src={user.profileImageUrl} width={0} height={0} />
+        <h1>{username}</h1>
+
+        {
+          currentUser.user?.id === userId &&
+          <button className='px-2 py-1 rounded-full bg-slate-400 h-30px w-30px'>
+            <Image
+              alt='Delete icon'
+              width={20}
+              height={20}
+              onClick={() => deletePost()}
+              src={delIcon}
+            />
+          </button>
+        }
+
       </div>
-      <h1>{content}</h1>
-      <h1>{formattedTime}</h1>
+      <h1 className='text-2xl'>{content}</h1>
+      <h1 className='text-sm font-medium text-slate-400'>{formattedTime}</h1>
     </div>
   )
 }

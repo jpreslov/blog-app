@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // const { createdAt, content, userId } = req.body
 
     try {
-      console.log(req.body)
+      // console.log(req.body)
       const createPost = await prisma.post.create({
         data: {
           createdAt: createdAt,
@@ -24,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         res.status(200).json(createPost)
     } catch(err) {
-      console.log(err)
+      // console.log(err)
       res.status(500).json({ msg: 'Your post could not be created' })
     }
   }
