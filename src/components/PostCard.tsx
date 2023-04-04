@@ -29,7 +29,9 @@ interface IUser {
 const PostCard = ({ id, createdAt, content, userId }: IPost) => {
   const [author, setAuthor] = useState<IUser>()
   const formattedTime = dayjs().to(createdAt.toString())
-  const currentUser = useUser()
+  const { user, isSignedIn } = useUser()
+
+  console.log(user)
 
   useMemo(() => {
     const getUser: () => Promise<IUser> = async () => {
@@ -74,7 +76,7 @@ const PostCard = ({ id, createdAt, content, userId }: IPost) => {
         </div>
 
         {
-          currentUser.user?.id === userId &&
+          isSignedIn && user && user?.id === userId &&
           <button className='px-2 py-1 rounded-full bg-slate-400 h-30px w-30px'>
             <Image
               alt='Delete icon'

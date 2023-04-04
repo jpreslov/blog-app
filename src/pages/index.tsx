@@ -2,8 +2,11 @@ import Head from 'next/head'
 
 import { useState, useEffect, ChangeEvent, FormEvent, useCallback, SetStateAction } from 'react'
 
-import { useUser } from '@clerk/nextjs'
 import { NextApiRequest, NextApiResponse } from 'next'
+
+import { useUser } from '@clerk/nextjs'
+import { UserResource } from '@clerk/types'
+
 import PostCard from '@/components/PostCard'
 import CreatePostWidget from '@/components/CreatePostWidget'
 // import { log } from 'next-axiom'
@@ -19,7 +22,7 @@ export default function Home() {
   const [textInput, setTextInput] = useState('')
   const [posts, setPosts] = useState<IPost[]>([])
   const [usernameErr, setUsernameErr] = useState(true)
-  const { user } = useUser()
+  const { user, isSignedIn } = useUser()
 
   const renderPosts: JSX.Element[] = posts.map(post => {
     return <PostCard
@@ -52,8 +55,8 @@ export default function Home() {
 
     fetchPosts()
     setUsernameErr(checkUser), { once: true }
-    
-  }, [user, checkUser])
+
+  }, [user, isSignedIn, checkUser])
 
   return (
     <>
@@ -65,14 +68,27 @@ export default function Home() {
       </Head>
       <main className='flex flex-col overflow-x-hidden overflow-y-scroll justify-evenly'>
         {/* Create post */}
-        <div className='mb-[-200px]'>
-          <CreatePostWidget
-            user={user}
-            textInput={textInput}
-            setTextInput={setTextInput}
-            usernameErr={usernameErr}
-          />
-        </div>
+        {
+          isSignedIn ? (
+            <div className='mb-[-200px]'>
+              <CreatePostWidget
+                user={user}
+                textInput={textInput}
+                setTextInput={setTextInput}
+                usernameErr={usernameErr}
+              />
+            </div>
+
+          ) : (
+            <div className='flex h-[100px] justify-center flex-col text-center w-screen'>
+              <div className='w-2/3 p-4 m-auto rounded-lg bg-gradient-to-tl from-slate-900 to-slate-700 '>
+                <h5 className='text-lg text-slate-100'>
+                  <a href='/sign-in' className='font-medium'>Sign in</a> to create a post.
+                </h5>
+              </div>
+            </div>
+          )
+        }
 
         {/* Display all posts */}
         <div className='flex flex-col items-center justify-center w-screen mb-2'>
