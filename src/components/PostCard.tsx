@@ -8,7 +8,7 @@ import { useUser } from '@clerk/nextjs'
 
 import delIcon from '../../public/icons8-trash.svg'
 import { NextApiResponse } from 'next'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 dayjs.extend(relativeTime)
 
@@ -27,24 +27,28 @@ interface IUser {
 }
 
 const PostCard = ({ id, createdAt, content, userId }: IPost) => {
-  const [username, setUsername] = useState<string>()
+  const [author, setAuthor] = useState<IUser>()
   const formattedTime = dayjs().to(createdAt.toString())
   const currentUser = useUser()
 
-  const getUser: () => Promise<IUser> = async () => {
-    const data = await fetch('/api/getUser', {
-      method: 'POST',
-      body: JSON.stringify({
-        userId: userId
+  useMemo(() => {
+    const getUser: () => Promise<IUser> = async () => {
+      const data = await fetch('/api/getUser', {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: userId
+        })
       })
-    })
-    const res: IUser = await data.json()
-    // console.log(res)
-    setUsername(res)
-    return res
-  }
 
-  const user: Promise<IUser> = getUser()
+      const res: IUser = await data.json()
+
+      console.log(res)
+      setAuthor(res)
+      return res
+    }
+
+    if (userId) getUser()
+  }, [userId])
 
   const deletePost = async () => {
     const data = await fetch('/api/deletePost', {
@@ -56,10 +60,19 @@ const PostCard = ({ id, createdAt, content, userId }: IPost) => {
   }
 
   return (
-    <div className='w-3/4 p-4 m-2 rounded-md shadow-lg text-zinc-200 bg-slate-700 bg-opacity-80'>
+    // <h1>hey</h1>
+    <div className='w-3/4 p-4 m-2 bg-gray-900 rounded-md shadow-sm shadow-gray-700 text-zinc-200'>
       <div className='flex flex-row w-[100%] justify-between'>
-        <Image alt='user profile pic' src={user.profileImageUrl} width={0} height={0} />
-        <h1>{username}</h1>
+        <div className='flex flex-row align-middle'>
+          <Image
+            alt='user profile pic'
+            src={author?.profileImageUrl || 'https://www.gravatar.com/avatar?d=mp'}
+            width={30}
+            height={30}
+            className='mr-3 rounded-full'
+          />
+          <h1 className='flex font-medium'>{author?.username}</h1>
+        </div>
 
         {
           currentUser.user?.id === userId &&

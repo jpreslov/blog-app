@@ -2,7 +2,16 @@
 
 const nextConfig = {
   images: {
-    domains: ['https://www.gravatar.com/avatar/']
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.gravatar.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.clerk.dev'
+      }
+    ]
   }
 }
 

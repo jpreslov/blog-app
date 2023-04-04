@@ -62,19 +62,20 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-
+      <main className='flex flex-col overflow-x-hidden overflow-y-scroll justify-evenly'>
         {/* Create post */}
-        <CreatePostWidget
-          user={user}
-          textInput={textInput}
-          setTextInput={setTextInput}
-          usernameErr={usernameErr}
-        />
+        <div className='mb-[-200px]'>
+          <CreatePostWidget
+            user={user}
+            textInput={textInput}
+            setTextInput={setTextInput}
+            usernameErr={usernameErr}
+          />
+        </div>
 
         {/* Display all posts */}
-        <div className='flex flex-col items-center justify-center w-screen m-2'>
-          {posts ? renderPosts : ''}
+        <div className='flex flex-col items-center justify-center w-screen mb-2'>
+          {posts && posts.length > 0 ? renderPosts : ''}
         </div>
 
       </main>

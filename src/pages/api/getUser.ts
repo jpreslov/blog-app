@@ -23,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       username: data?.username
     }
 
-    console.log('from api', formattedUser.username)
+    // console.log('from api', formattedUser)
     res.status(200).json(formattedUser)
 
   } catch (err) {

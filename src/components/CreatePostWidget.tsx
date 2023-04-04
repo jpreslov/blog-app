@@ -33,7 +33,7 @@ const CreatePostWidget = ({
   }
 
   return (
-    <div className='flex p-3 mt-5 font-normal justify-center text-lg h-96 xl:w-[60%] m-auto text-cyan-50 rounded-xl'>
+    <div className='flex justify-center p-3 mt-5 text-lg font-normal h-96 text-cyan-50 rounded-xl'>
       <form className='flex flex-col w-96' onSubmit={(e: FormEvent) => handleSubmit(e)}>
         <textarea
           className='p-2 bg-gray-900 border-2 border-opacity-25 rounded-md rounded-b-none resize-none text-cyan-50 border-sky-100'
