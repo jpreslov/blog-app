@@ -42,7 +42,6 @@ const PostCard = ({ id, createdAt, content, userId }: IPost) => {
 
       const res: IUser = await data.json()
 
-      console.log(res)
       setAuthor(res)
       return res
     }

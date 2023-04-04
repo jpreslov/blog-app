@@ -12,7 +12,6 @@ const CreatePostWidget = ({
   setTextInput: any,
   usernameErr: boolean,
 }) => {
-  console.log(usernameErr)
 
   const handleSubmit = async (e: FormEvent) => {
     if (user && user.id !== null) {
