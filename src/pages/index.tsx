@@ -35,7 +35,7 @@ export default function Home() {
   })
 
   const usernameCheck: () => boolean = () => {
-    if (user && !user.username) {
+    if (isSignedIn && user && !user.username) {
       return true
     } else if (user && user.username !== '') {
       return false
@@ -46,15 +46,17 @@ export default function Home() {
   const checkUser: SetStateAction<boolean> = usernameCheck()
 
   useEffect(() => {
-    console.log(user)
-    const fetchPosts = async () => {
-      const res = await fetch('/api/getPosts')
-      const data = await res.json()
-      if (data && data !== '') setPosts(data)
-    }
+    if (isSignedIn) {
+      console.log(user)
+      const fetchPosts = async () => {
+        const res = await fetch('/api/getPosts')
+        const data = await res.json()
+        if (data && data !== '') setPosts(data)
+      }
 
-    fetchPosts()
-    setUsernameErr(checkUser), { once: true }
+      fetchPosts()
+      setUsernameErr(checkUser), { once: true }
+    }
 
   }, [user, isSignedIn, checkUser])
 
@@ -70,31 +72,32 @@ export default function Home() {
         {/* Create post */}
         {
           isSignedIn ? (
-            <div className='mb-[-200px]'>
-              <CreatePostWidget
-                user={user}
-                textInput={textInput}
-                setTextInput={setTextInput}
-                usernameErr={usernameErr}
-              />
-            </div>
-
-          ) : (
-            <div className='flex h-[100px] justify-center flex-col text-center w-screen'>
-              <div className='w-2/3 p-4 m-auto rounded-lg bg-gradient-to-tl from-slate-900 to-slate-700 '>
-                <h5 className='text-lg text-slate-100'>
-                  <a href='/sign-in' className='font-medium'>Sign in</a> to create a post.
-                </h5>
+            <>
+              <div className='mb-[-200px]'>
+                <CreatePostWidget
+                  user={user}
+                  textInput={textInput}
+                  setTextInput={setTextInput}
+                  usernameErr={usernameErr}
+                />
               </div>
-            </div>
+              {/* Display all posts */}
+              <div className='flex flex-col items-center justify-center w-screen mb-2'>
+                {posts && posts.length > 0 ? renderPosts : ''}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className='flex h-[100px] justify-center flex-col text-center w-screen'>
+                <div className='w-2/3 p-4 m-auto rounded-lg bg-gradient-to-tl from-slate-900 to-slate-700 '>
+                  <h5 className='text-lg text-slate-100'>
+                    <a href='/sign-in' className='font-medium'>Sign in</a> to create and view posts.
+                  </h5>
+                </div>
+              </div>
+            </>
           )
         }
-
-        {/* Display all posts */}
-        <div className='flex flex-col items-center justify-center w-screen mb-2'>
-          {posts && posts.length > 0 ? renderPosts : ''}
-        </div>
-
       </main>
     </>
   )

@@ -61,7 +61,6 @@ const PostCard = ({ id, createdAt, content, userId }: IPost) => {
   }
 
   return (
-    // <h1>hey</h1>
     <div className='w-3/4 p-4 m-2 bg-gray-900 rounded-md shadow-sm shadow-gray-700 text-zinc-200'>
       <div className='flex flex-row w-[100%] justify-between'>
         <div className='flex flex-row align-middle'>
