@@ -6,22 +6,20 @@ interface Post {
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    const body: Post = JSON.parse(req.body)
-    const { id } = body
+  const body: Post = JSON.parse(req.body)
+  const { id } = body
 
-    try {
-      console.log(req.body)
-      const deletePost = await prisma.post.delete({
-        where: {
-          id: id
-        }
-      })
+  try {
+    const deletePost = await prisma.post.delete({
+      where: {
+        id: id
+      }
+    })
 
-        res.status(200).json(deletePost)
-    } catch(err) {
-      console.log(err)
-      res.status(500).json({ msg: 'Your post could not be deleted' })
-    }
+    res.status(200).json(deletePost)
+  } catch (err) {
+    res.status(500).json({ msg: 'Your post could not be deleted' })
   }
+}
 
-  export default handler
+export default handler

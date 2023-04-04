@@ -43,6 +43,7 @@ export default function Home() {
   const checkUser: SetStateAction<boolean> = usernameCheck()
 
   useEffect(() => {
+    console.log(user)
     const fetchPosts = async () => {
       const res = await fetch('/api/getPosts')
       const data = await res.json()
