@@ -31,8 +31,6 @@ const PostCard = ({ id, createdAt, content, userId }: IPost) => {
   const formattedTime = dayjs().to(createdAt.toString())
   const { user, isSignedIn } = useUser()
 
-  console.log(user)
-
   useMemo(() => {
     const getUser: () => Promise<IUser> = async () => {
       const data = await fetch('/api/getUser', {

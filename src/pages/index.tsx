@@ -47,7 +47,6 @@ export default function Home() {
 
   useEffect(() => {
     if (isSignedIn) {
-      console.log(user)
       const fetchPosts = async () => {
         const res = await fetch('/api/getPosts')
         const data = await res.json()
