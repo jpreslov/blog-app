@@ -16,7 +16,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       console.log({ code, meta, message })
     }
     res.status(500).json(err)
-
   }
 }
 

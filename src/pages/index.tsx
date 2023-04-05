@@ -82,13 +82,15 @@ export default function Home() {
               </div>
               {/* Display all posts */}
               <div className='flex flex-col items-center justify-center w-screen mb-2'>
-                {posts && posts.length > 0 ? renderPosts : ''}
+                {posts && posts.length > 0 ? renderPosts : (
+                  <p>No posts found.</p>
+                )}
               </div>
             </>
           ) : (
             <>
-              <div className='flex h-[100px] justify-center flex-col text-center w-screen'>
-                <div className='w-2/3 p-4 m-auto rounded-lg bg-gradient-to-tl from-slate-900 to-slate-700 '>
+              <div className='flex w-2/3 h-[100px] justify-center flex-col text-center'>
+                <div className='max-w-[1000px] p-4 m-auto rounded-lg bg-gradient-to-tl from-slate-900 to-slate-700 '>
                   <h5 className='text-lg text-slate-100'>
                     <a href='/sign-in' className='font-medium'>Sign in</a> to create and view posts.
                   </h5>
