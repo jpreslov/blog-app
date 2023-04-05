@@ -1,22 +1,16 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import Nav from '../components/Nav'
 
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs'
+import { ClerkProvider, SignedIn, SignedOut, SignIn, SignUp } from '@clerk/nextjs'
 import { dark } from '@clerk/themes';
-import SignUpPage from './sign-up/[[...index]]';
-// import SignUpPage from './sign-up/[[...index]]';
+
+import Nav from '../components/Nav'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ClerkProvider {...pageProps} appearance={{ baseTheme: dark }}>
-      <SignedIn>
-        <Nav />
-        <Component {...pageProps} />
-      </SignedIn>
-      <SignedOut>
-        <SignUpPage />
-      </SignedOut>
+      <Nav />
+      <Component {...pageProps} />
     </ClerkProvider>
   )
 }
