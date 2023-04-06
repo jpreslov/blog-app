@@ -21,7 +21,6 @@ interface IPost {
 export default function Home() {
   const [textInput, setTextInput] = useState('')
   const [posts, setPosts] = useState<IPost[]>([])
-  const [usernameErr, setUsernameErr] = useState(true)
   const { user, isSignedIn } = useUser()
 
   const renderPosts: JSX.Element[] = posts.map(post => {
@@ -54,7 +53,6 @@ export default function Home() {
       }
 
       fetchPosts()
-      setUsernameErr(checkUser), { once: true }
     }
 
   }, [user, isSignedIn, checkUser])
@@ -77,7 +75,6 @@ export default function Home() {
                   user={user}
                   textInput={textInput}
                   setTextInput={setTextInput}
-                  usernameErr={usernameErr}
                 />
               </div>
               {/* Display all posts */}

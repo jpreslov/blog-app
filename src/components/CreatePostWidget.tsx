@@ -4,13 +4,11 @@ import { FormEvent } from "react"
 const CreatePostWidget = ({
   user,
   textInput,
-  setTextInput,
-  usernameErr
+  setTextInput
 }: {
   user: any,
   textInput: any,
-  setTextInput: any,
-  usernameErr: boolean,
+  setTextInput: any
 }) => {
 
   const handleSubmit = async (e: FormEvent) => {
@@ -41,7 +39,6 @@ const CreatePostWidget = ({
         <button
           className='py-2 bg-gray-900 border-2 border-opacity-25 rounded-t-none shadow-inner border-t-none border-sky-100 rounded-xl place-self-center w-96'
           type='submit'
-          disabled={usernameErr}
         >
           Submit
         </button>
